@@ -70,19 +70,37 @@ if selected_yog != "Semua Tahun":
 # -------------------------------
 st.title("🎓 Academic Dashboard")
 
-# --- Card Kotak: Total Mahasiswa ---
-if 'ID No' in filtered_df.columns:
-    total_students = filtered_df['ID No'].nunique()
-    col1 = st.columns(1)[0]
-    with col1:
-        st.markdown("""
-            <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px; text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
+# --- Kartu Statistik: Total Mahasiswa & Rata-rata CGPA ---
+col1, col2 = st.columns(2)
+
+# Card 1: Total Mahasiswa
+with col1:
+    if 'ID No.' in filtered_df.columns:
+        total_students = filtered_df['ID No.'].nunique()
+        st.markdown(f"""
+            <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px;
+                        text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
                 <h4 style='color: #333;'>Total Mahasiswa</h4>
-                <h2 style='color: #007acc;'>%s</h2>
+                <h2 style='color: #007acc;'>{total_students}</h2>
             </div>
-        """ % total_students, unsafe_allow_html=True)
-else:
-    st.warning("Kolom 'ID No.' tidak ditemukan dalam data.")
+        """, unsafe_allow_html=True)
+    else:
+        st.warning("Kolom 'ID No.' tidak ditemukan dalam data.")
+
+# Card 2: Average CGPA
+with col2:
+    if 'CGPA' in filtered_df.columns:
+        avg_cgpa = round(filtered_df['CGPA'].mean(), 2)
+        st.markdown(f"""
+            <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px;
+                        text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
+                <h4 style='color: #333;'>Rata-rata CGPA</h4>
+                <h2 style='color: #28a745;'>{avg_cgpa}</h2>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.warning("Kolom 'CGPA' tidak ditemukan dalam data.")
+
 
 
 # --- Bar Chart: Rata-rata CGPA per Tahun
