@@ -37,37 +37,48 @@ prog_code_mapping = {
 }
 
 df['Prog Short'] = df['Prog Code'].map(prog_code_mapping)
-
 # -------------------------------
 # Sidebar Filters
 # -------------------------------
 st.sidebar.header("🔍 Filter Data")
 
-# Filter Program Studi
-prog_codes = df['Prog Code'].dropna().unique()
-selected_prog = st.sidebar.selectbox("Pilih Program Studi (Prog Code):", sorted(prog_codes))
+# Filter Program Studi - dengan opsi "Semua"
+prog_codes = sorted(df['Prog Code'].dropna().unique())
+prog_options = ["Semua Program"] + prog_codes
+selected_prog = st.sidebar.selectbox("Pilih Program Studi (Prog Code):", prog_options)
 
-# Filter Tahun Masuk
+# Filter Tahun Masuk - dropdown tunggal dengan opsi "Semua Tahun"
 available_yog = sorted(df['YoG'].dropna().unique())
-selected_yogs = st.sidebar.multiselect("Pilih Tahun Masuk (YoG):", available_yog, default=available_yog)
+yog_options = ["Semua Tahun"] + [str(y) for y in available_yog]
+selected_yog = st.sidebar.selectbox("Pilih Tahun Masuk (YoG):", yog_options)
+
+# -------------------------------
+# Filter Data Berdasarkan Pilihan
+# -------------------------------
+filtered_df = df.copy()
+
+# Terapkan filter Prog Code
+if selected_prog != "Semua Program":
+    filtered_df = filtered_df[filtered_df['Prog Code'] == selected_prog]
+
+# Terapkan filter Tahun Masuk
+if selected_yog != "Semua Tahun":
+    filtered_df = filtered_df[filtered_df['YoG'] == int(selected_yog)]
 
 # -------------------------------
 # Main Dashboard
 # -------------------------------
 st.title("🎓 Academic Dashboard")
 
-# Filter Data
-filtered_df = df[(df['Prog Code'] == selected_prog) & (df['YoG'].isin(selected_yogs))]
-
-# Card: Total Mahasiswa
-if 'ID No' in filtered_df.columns:
-    total_students = filtered_df['ID No'].nunique()
+# --- Card: Total Mahasiswa
+if 'ID No.' in filtered_df.columns:
+    total_students = filtered_df['ID No.'].nunique()
     st.markdown(f"### 📇 Total Mahasiswa: `{total_students}`")
 else:
     st.warning("Kolom 'ID No.' tidak ditemukan dalam data.")
 
-# Bar Chart: Rata-rata CGPA
-st.subheader("📊 Rata-rata CGPA Mahasiswa")
+# --- Bar Chart: Rata-rata CGPA per Tahun
+st.subheader("📊 Rata-rata CGPA Mahasiswa per Tahun")
 
 if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
     if not filtered_df.empty:
@@ -76,14 +87,14 @@ if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
         avg_gpa.plot(kind='bar', color='skyblue', ax=ax_bar)
         ax_bar.set_ylabel("Rata-rata CGPA")
         ax_bar.set_xlabel("Tahun Masuk")
-        ax_bar.set_title(f"Rata-rata CGPA ({selected_prog})", fontsize=10)
+        ax_bar.set_title("Rata-rata CGPA Mahasiswa", fontsize=10)
         st.pyplot(fig_bar)
     else:
         st.info("Tidak ada data untuk kombinasi filter.")
 else:
     st.warning("Kolom 'YoG' atau 'CGPA' tidak ditemukan dalam data.")
 
-# Pie Chart: Distribusi Gender
+# --- Pie Chart: Distribusi Gender
 st.subheader("🧑‍🎓 Distribusi Gender Mahasiswa")
 
 if 'Gender' in filtered_df.columns:
