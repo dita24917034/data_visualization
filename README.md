@@ -17,6 +17,7 @@ Pada bagian atas dashboard, terdapat 2 slicer / filter yang bertujuan untuk memb
 
 Di bagian bawah judul terdapat keterangan atau card yang terdiri dari jumlah siswa yang ada, rata - rata GPA dan Tahun kelulusan. 
 Keterangan tersebut bersifat dinamis dan berubah sesuai filter yang digunakan. 
+
 <img width="509" alt="image" src="https://github.com/user-attachments/assets/960ad70f-52c5-45d7-a1e8-62f219a9566d" />
 
 Di bawah keterangan tersebut, terdapat 3 visualisasi yaitu :
