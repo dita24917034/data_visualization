@@ -168,7 +168,7 @@ if available_cols and 'YoG' in filtered_df.columns:
 
         # Plot dengan Matplotlib
         import seaborn as sns
-fig_box, ax_box = plt.subplots(figsize=(7, 4))  # Ukuran sebelum dikecilkan
+        fig_box, ax_box = plt.subplots(figsize=(7, 4))  # Ukuran sebelum dikecilkan
         sns.boxplot(data=boxplot_data, x='YoG', y='Nilai CGPA', hue='Level', ax=ax_box)
         ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk")
         ax_box.legend(title='Tingkat')
