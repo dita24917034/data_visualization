@@ -168,13 +168,10 @@ if available_cols and 'YoG' in filtered_df.columns:
 
         # Plot dengan Matplotlib
         import seaborn as sns
-        fig_box, ax_box = plt.subplots(figsize=(6, 3))  # Ukuran visual konsisten
+fig_box, ax_box = plt.subplots(figsize=(7, 4))  # Ukuran sebelum dikecilkan
         sns.boxplot(data=boxplot_data, x='YoG', y='Nilai CGPA', hue='Level', ax=ax_box)
-        ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk", fontsize=10)
-        ax_box.set_xlabel("Tahun Masuk", fontsize=9)
-        ax_box.set_ylabel("Nilai CGPA", fontsize=9)
-        ax_box.tick_params(labelsize=8)
-        ax_box.legend(title='Tingkat', fontsize=8, title_fontsize=9)
+        ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk")
+        ax_box.legend(title='Tingkat')
         st.pyplot(fig_box)
     else:
         st.info("Tidak ada data untuk ditampilkan dalam box plot.")
