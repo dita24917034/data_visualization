@@ -10,13 +10,14 @@ Data yang digunakan untuk membuat visualisasi ini tidak diolah lagi, karena data
 # Dashboard
 Untuk akses Dashboard : https://datavisualization-jjptcw3fur5ydrmtausfga.streamlit.app/
 
-<img width="170" alt="image" src="https://github.com/user-attachments/assets/07298f7b-064c-4aff-bfe7-3accf601d7ca" />
 Pada bagian atas dashboard, terdapat 2 slicer / filter yang bertujuan untuk membantu pengguna menfilter sesuai kebutuhan. Slicer tersebut terdiri dari sebagai berikut.
 1. Program - Yang terdiri dari 17 Program Studi yang ada di Universitas tersebut.
 2. Year - Berisi tahun lulus mahasiswa
-<img width="509" alt="image" src="https://github.com/user-attachments/assets/960ad70f-52c5-45d7-a1e8-62f219a9566d" />
+<img width="170" alt="image" src="https://github.com/user-attachments/assets/07298f7b-064c-4aff-bfe7-3accf601d7ca" />
 
 Di bagian bawah judul terdapat keterangan atau card yang terdiri dari jumlah siswa yang ada, rata - rata GPA dan Tahun kelulusan. Keterangan tersebut bersifat dinamis dan berubah sesuai filter yang digunakan. 
+<img width="509" alt="image" src="https://github.com/user-attachments/assets/960ad70f-52c5-45d7-a1e8-62f219a9566d" />
+
 Di bawah keterangan tersebut, terdapat 3 visualisasi yaitu :
 1. Bar Chart : Untuk melihat rata - rata GPA berdasarkan tahun kelulusan yang disesuaikan dengan filter yang dipilih.
    <img width="514" alt="image" src="https://github.com/user-attachments/assets/4ac4cf50-2227-4fec-aef6-6528de92aed0" />
