@@ -40,16 +40,16 @@ df['Prog Short'] = df['Prog Code'].map(prog_code_mapping)
 # -------------------------------
 # Sidebar Filters
 # -------------------------------
-st.sidebar.header("🔍 Filter Data")
+st.sidebar.header("Filter Data")
 
 # Filter Program Studi - dengan opsi "Semua"
 prog_codes = sorted(df['Prog Code'].dropna().unique())
-prog_options = ["Semua Program"] + prog_codes
+prog_options = ["All Program"] + prog_codes
 selected_prog = st.sidebar.selectbox("Pilih Program Studi (Prog Code):", prog_options)
 
 # Filter Tahun Masuk - dropdown tunggal dengan opsi "Semua Tahun"
 available_yog = sorted(df['YoG'].dropna().unique())
-yog_options = ["Semua Tahun"] + [str(y) for y in available_yog]
+yog_options = ["All Years"] + [str(y) for y in available_yog]
 selected_yog = st.sidebar.selectbox("Pilih Tahun Masuk (YoG):", yog_options)
 
 # -------------------------------
@@ -58,17 +58,17 @@ selected_yog = st.sidebar.selectbox("Pilih Tahun Masuk (YoG):", yog_options)
 filtered_df = df.copy()
 
 # Terapkan filter Prog Code
-if selected_prog != "Semua Program":
+if selected_prog != "All Program":
     filtered_df = filtered_df[filtered_df['Prog Code'] == selected_prog]
 
 # Terapkan filter Tahun Masuk
-if selected_yog != "Semua Tahun":
+if selected_yog != "All Years":
     filtered_df = filtered_df[filtered_df['YoG'] == int(selected_yog)]
 
 # -------------------------------
 # Main Dashboard
 # -------------------------------
-st.title("Universitas ABC Academic Dashboard")
+st.title("University ABC Student Dashboard")
 
 # --- Kartu Statistik: Total Mahasiswa, Rata-rata CGPA, Tahun Masuk (YoG) ---
 col1, col2, col3 = st.columns(3)
@@ -110,16 +110,16 @@ with col3:
 
 
 # --- Bar Chart: Rata-rata CGPA per Tahun
-st.subheader("📊 Rata-rata GPA Mahasiswa per Tahun")
+st.subheader("Average GPA per Year")
 
 if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
     if not filtered_df.empty:
         avg_gpa = filtered_df.groupby('YoG')['CGPA'].mean()
         fig_bar, ax_bar = plt.subplots(figsize=(4.5, 2.5))  # Ukuran visual seimbang
         avg_gpa.plot(kind='bar', color='skyblue', ax=ax_bar)
-        ax_bar.set_ylabel("Rata-rata CGPA", fontsize=9)
-        ax_bar.set_xlabel("Tahun Masuk", fontsize=9)
-        ax_bar.set_title("Rata-rata CGPA Mahasiswa", fontsize=10)
+        ax_bar.set_ylabel("Average GPA", fontsize=9)
+        ax_bar.set_xlabel("Year Of Admission Masuk", fontsize=9)
+        ax_bar.set_title("Average GPA", fontsize=10)
         ax_bar.tick_params(labelsize=8)
         st.pyplot(fig_bar)
     else:
@@ -128,7 +128,7 @@ else:
     st.warning("Kolom 'YoG' atau 'CGPA' tidak ditemukan dalam data.")
 
 # --- Pie Chart: Distribusi Gender
-st.subheader("🧑‍🎓 Distribusi Gender Mahasiswa")
+st.subheader("Distributed Gender")
 
 if 'Gender' in filtered_df.columns:
     gender_counts = filtered_df['Gender'].value_counts()
@@ -149,7 +149,8 @@ if 'Gender' in filtered_df.columns:
 else:
     st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
 # --- Box Plot CGPA100–CGPA400 per Tahun Masuk ---
-st.subheader("📦 Distribusi Nilai GPA Thn 1 - 4 per Tahun Masuk")
+# --- Box Plot CGPA100–CGPA400 per Tahun Masuk ---
+st.subheader("Distributed GPA year 1 - 4 per Year Of Admission")
 
 # Pastikan kolom tersedia
 cgpa_columns = ['CGPA100', 'CGPA200', 'CGPA300', 'CGPA400']
@@ -163,14 +164,14 @@ if available_cols and 'YoG' in filtered_df.columns:
             id_vars=['YoG'],
             value_vars=available_cols,
             var_name='Level',
-            value_name='Nilai GPA'
+            value_name='GPA'
         )
 
-        # Plot dengan Matplotlib
+        # Plot dengan Matplotlib/Seaborn (ukuran default)
         import seaborn as sns
         fig_box, ax_box = plt.subplots(figsize=(7, 4))  # Ukuran sebelum dikecilkan
-        sns.boxplot(data=boxplot_data, x='YoG', y='Nilai CGPA', hue='Level', ax=ax_box)
-        ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk")
+        sns.boxplot(data=boxplot_data, x='YoG', y='Nilai GPA', hue='Level', ax=ax_box)
+        ax_box.set_title("Distributed GPA year 1 - 4 per Year Of Admission")
         ax_box.legend(title='Tingkat')
         st.pyplot(fig_box)
     else:
