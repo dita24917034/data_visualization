@@ -68,10 +68,10 @@ if selected_yog != "Semua Tahun":
 # -------------------------------
 # Main Dashboard
 # -------------------------------
-st.title("🎓 Academic Dashboard")
+st.title("Universitas ABC Academic Dashboard")
 
-# --- Kartu Statistik: Total Mahasiswa & Rata-rata CGPA ---
-col1, col2 = st.columns(2)
+# --- Kartu Statistik: Total Mahasiswa, Rata-rata CGPA, Tahun Masuk (YoG) ---
+col1, col2, col3 = st.columns(3)
 
 # Card 1: Total Mahasiswa
 with col1:
@@ -87,7 +87,7 @@ with col1:
     else:
         st.warning("Kolom 'ID No.' tidak ditemukan dalam data.")
 
-# Card 2: Average CGPA
+# Card 2: Rata-rata CGPA
 with col2:
     if 'CGPA' in filtered_df.columns:
         avg_cgpa = round(filtered_df['CGPA'].mean(), 2)
@@ -101,7 +101,16 @@ with col2:
     else:
         st.warning("Kolom 'CGPA' tidak ditemukan dalam data.")
 
-
+# Card 3: Tahun Masuk (YoG)
+with col3:
+    year_display = selected_yog if selected_yog != "Semua Tahun" else "Semua Tahun"
+    st.markdown(f"""
+        <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px;
+                    text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
+            <h4 style='color: #333;'>Tahun Masuk (YoG)</h4>
+            <h2 style='color: #d9534f;'>{year_display}</h2>
+        </div>
+    """, unsafe_allow_html=True)
 
 # --- Bar Chart: Rata-rata CGPA per Tahun
 st.subheader("📊 Rata-rata GPA Mahasiswa per Tahun")
