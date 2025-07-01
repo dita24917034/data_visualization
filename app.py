@@ -118,7 +118,7 @@ if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
         fig_bar, ax_bar = plt.subplots(figsize=(4.5, 2.5))  # Ukuran visual seimbang
         avg_gpa.plot(kind='bar', color='skyblue', ax=ax_bar)
         ax_bar.set_ylabel("Average GPA", fontsize=9)
-        ax_bar.set_xlabel("Year Of Admission", fontsize=9)
+        ax_bar.set_xlabel("Graduation Year", fontsize=9)
         ax_bar.set_title("Average GPA", fontsize=10)
         ax_bar.tick_params(labelsize=8)
         st.pyplot(fig_bar)
