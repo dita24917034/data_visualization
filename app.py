@@ -16,27 +16,52 @@ import matplotlib.pyplot as plt
 # # Load data
 df = pd.read_csv("data academic.csv")
 # 
+prog_code_mapping = {
+    'BCH': 'Biochemistry',
+    'BLD': 'Building technology',
+    'CEN': 'Computer Engineering',
+    'CHE': 'Chemical Engineering',
+    'CHM': 'Industrial Chemistry',
+    'CIS': 'Computer Science',
+    'CVE': 'Civil Engineering',
+    'EEE': 'Electrical and Electronics Engineering',
+    'ICE': 'Information and Communication Engineering',
+    'MAT': 'Mathematics',
+    'MCB': 'Microbiology',
+    'MCE': 'Mechanical Engineering',
+    'MIS': 'Management and Information System',
+    'PET': 'Petroleum Engineering',
+    'PHYE': 'Industrial Physics-Electronics and IT Applications',
+    'PHYG': 'Industrial Physics-Applied Geophysics',
+    'PHYR' : 'Industrial Physics-Renewable Energy'
+}
+
+df['Prog Short'] = df['Prog Code'].map(prog_code_mapping)
 # # Judul Dashboard
-st.title("🎓 Academic Dashboard")
+st.title("🎓 Universitas ABC Academic Dashboard")
 # 
-# # Filter Prog Code
+# Filter Prog Code
 prog_codes = df['Prog Code'].dropna().unique()
 selected_prog = st.selectbox("Pilih Program Studi (Prog Code):", sorted(prog_codes))
-# 
-# # Filter data sesuai pilihan
-filtered_df = df[df['Prog Code'] == selected_prog]
-# 
-# # --- Bar Chart: Rata-rata GPA per Tahun ---
-st.subheader("📊 Rata-rata GPA per Tahun Masuk")
-# 
-if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
-    avg_gpa_per_year = filtered_df.groupby('YoG')['CGPA'].mean()
+
+# Filter YoG (Tahun Masuk/Lulus)
+yog_options = df['YoG'].dropna().sort_values().unique()
+selected_yog = st.selectbox("Pilih Tahun Masuk (YoG):", yog_options)
+
+# Filter data berdasarkan Prog Code dan YoG
+filtered_df = df[(df['Prog Code'] == selected_prog) & (df['YoG'] == selected_yog)]
+
+# --- Bar Chart: Rata-rata CGPA per Tahun ---
+st.subheader("📊 Rata-rata CGPA per Tahun")
+
+if 'YoG' in df.columns and 'CGPA' in df.columns:
+    avg_gpa_per_year = df[df['Prog Code'] == selected_prog].groupby('YoG')['CGPA'].mean()
 
     fig_bar, ax_bar = plt.subplots()
     avg_gpa_per_year.plot(kind='bar', color='skyblue', ax=ax_bar)
     ax_bar.set_ylabel("Rata-rata CGPA")
     ax_bar.set_xlabel("Tahun Masuk")
-    ax_bar.set_title("Rata-rata CGPA per Tahun (YoG)")
+    ax_bar.set_title(f"Rata-rata CGPA Mahasiswa - {selected_prog}")
     st.pyplot(fig_bar)
 else:
     st.warning("Kolom 'YoG' atau 'CGPA' tidak ditemukan dalam data.")
@@ -48,7 +73,7 @@ if 'Gender' in filtered_df.columns:
     gender_counts = filtered_df['Gender'].value_counts()
     fig_pie, ax_pie = plt.subplots()
     ax_pie.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90, colors=['lightcoral', 'lightskyblue'])
-    ax_pie.axis('equal')
+    ax_pie.axis('equal')  # Pie chart as a circle
     st.pyplot(fig_pie)
 else:
     st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
