@@ -9,14 +9,9 @@ Original file is located at
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%writefile app.py
- import streamlit as st
- import pandas as pd
- import altair as alt
- import matplotlib.pyplot as plt
- import numpy as np
- import plotly.express as px
- from joblib import load
- import plotly.graph_objects as go
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
 # 
 # # Load data
  df = pd.read_csv("data academic.csv")
