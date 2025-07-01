@@ -75,8 +75,8 @@ col1, col2 = st.columns(2)
 
 # Card 1: Total Mahasiswa
 with col1:
-    if 'ID No.' in filtered_df.columns:
-        total_students = filtered_df['ID No.'].nunique()
+    if 'ID No' in filtered_df.columns:
+        total_students = filtered_df['ID No'].nunique()
         st.markdown(f"""
             <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px;
                         text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
@@ -135,3 +135,32 @@ if 'Gender' in filtered_df.columns:
         st.info("Tidak ada data gender pada filter ini.")
 else:
     st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
+# --- Box Plot CGPA100–CGPA400 per Tahun Masuk ---
+st.subheader("📦 Distribusi Nilai CGPA100–400 per Tahun Masuk")
+
+# Pastikan kolom tersedia
+cgpa_columns = ['CGPA100', 'CGPA200', 'CGPA300', 'CGPA400']
+available_cols = [col for col in cgpa_columns if col in filtered_df.columns]
+
+if available_cols and 'YoG' in filtered_df.columns:
+    if not filtered_df.empty:
+        # Persiapkan data untuk boxplot: melt jadi long-form
+        boxplot_data = pd.melt(
+            filtered_df,
+            id_vars=['YoG'],
+            value_vars=available_cols,
+            var_name='Level',
+            value_name='Nilai CGPA'
+        )
+
+        # Plot dengan Matplotlib
+        import seaborn as sns
+        fig_box, ax_box = plt.subplots(figsize=(7, 4))
+        sns.boxplot(data=boxplot_data, x='YoG', y='Nilai CGPA', hue='Level', ax=ax_box)
+        ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk")
+        ax_box.legend(title='Tingkat')
+        st.pyplot(fig_box)
+    else:
+        st.info("Tidak ada data untuk ditampilkan dalam box plot.")
+else:
+    st.warning("Kolom 'YoG' atau CGPA100–400 tidak tersedia dalam data.")
