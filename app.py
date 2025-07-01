@@ -37,60 +37,64 @@ prog_code_mapping = {
 }
 
 df['Prog Short'] = df['Prog Code'].map(prog_code_mapping)
-# # Judul Dashboard
-st.title("🎓 Universitas ABC Academic Dashboard")
-# --- Filter Program Studi ---
+
+# -------------------------------
+# Sidebar Filters
+# -------------------------------
+st.sidebar.header("🔍 Filter Data")
+
+# Filter Program Studi
 prog_codes = df['Prog Code'].dropna().unique()
-selected_prog = st.selectbox("Pilih Program Studi (Prog Code):", sorted(prog_codes))
+selected_prog = st.sidebar.selectbox("Pilih Program Studi (Prog Code):", sorted(prog_codes))
 
-# --- Filter Tahun Masuk (multiselect) untuk Bar Chart ---
+# Filter Tahun Masuk
 available_yog = sorted(df['YoG'].dropna().unique())
-selected_yogs = st.multiselect("Pilih Tahun Masuk (YoG) untuk Bar Chart:", available_yog, default=available_yog)
+selected_yogs = st.sidebar.multiselect("Pilih Tahun Masuk (YoG):", available_yog, default=available_yog)
 
-# --- Informasi Total Mahasiswa (Card) ---
-filtered_card_df = df[(df['Prog Code'] == selected_prog) & (df['YoG'].isin(selected_yogs))]
-if 'ID No.' in filtered_card_df.columns:
-    total_students = filtered_card_df['ID No.'].nunique()
+# -------------------------------
+# Main Dashboard
+# -------------------------------
+st.title("🎓 Academic Dashboard")
+
+# Filter Data
+filtered_df = df[(df['Prog Code'] == selected_prog) & (df['YoG'].isin(selected_yogs))]
+
+# Card: Total Mahasiswa
+if 'ID No' in filtered_df.columns:
+    total_students = filtered_df['ID No'].nunique()
     st.markdown(f"### 📇 Total Mahasiswa: `{total_students}`")
 else:
     st.warning("Kolom 'ID No.' tidak ditemukan dalam data.")
 
-# --- Bar Chart: Rata-rata CGPA per Tahun (terfilter YoG & Prog Code) ---
-st.subheader("📊 Rata-rata CGPA berdasarkan Tahun Masuk")
+# Bar Chart: Rata-rata CGPA
+st.subheader("📊 Rata-rata CGPA Mahasiswa")
 
-if 'YoG' in df.columns and 'CGPA' in df.columns:
-    filtered_bar_df = df[(df['Prog Code'] == selected_prog) & (df['YoG'].isin(selected_yogs))]
-    
-    if not filtered_bar_df.empty:
-        avg_gpa = filtered_bar_df.groupby('YoG')['CGPA'].mean()
-        
-        fig_bar, ax_bar = plt.subplots(figsize=(5, 3))  # Ukuran diperbesar/dikecilkan di sini
+if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
+    if not filtered_df.empty:
+        avg_gpa = filtered_df.groupby('YoG')['CGPA'].mean()
+        fig_bar, ax_bar = plt.subplots(figsize=(5, 3))
         avg_gpa.plot(kind='bar', color='skyblue', ax=ax_bar)
         ax_bar.set_ylabel("Rata-rata CGPA")
         ax_bar.set_xlabel("Tahun Masuk")
-        ax_bar.set_title(f"Rata-rata CGPA Mahasiswa ({selected_prog})", fontsize=10)
+        ax_bar.set_title(f"Rata-rata CGPA ({selected_prog})", fontsize=10)
         st.pyplot(fig_bar)
     else:
-        st.info("Tidak ada data untuk kombinasi Program dan Tahun Masuk yang dipilih.")
+        st.info("Tidak ada data untuk kombinasi filter.")
 else:
     st.warning("Kolom 'YoG' atau 'CGPA' tidak ditemukan dalam data.")
 
-# --- Filter tambahan untuk Pie Chart ---
-st.subheader("🧑‍🎓 Filter Gender Pie Chart")
+# Pie Chart: Distribusi Gender
+st.subheader("🧑‍🎓 Distribusi Gender Mahasiswa")
 
-selected_yog_for_pie = st.selectbox("Pilih Tahun Masuk (YoG) untuk Pie Chart:", available_yog)
-
-# --- Pie Chart: Gender Distribution ---
-st.subheader("🧑‍🎓 Distribusi Gender Mahasiswa (berdasarkan filter)")
-
-filtered_pie_df = df[(df['Prog Code'] == selected_prog) & (df['YoG'] == selected_yog_for_pie)]
-
-if 'Gender' in filtered_pie_df.columns:
-    gender_counts = filtered_pie_df['Gender'].value_counts()
-    fig_pie, ax_pie = plt.subplots(figsize=(4, 4))  # Ukuran pie chart lebih kecil
-    ax_pie.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90,
-               colors=['lightcoral', 'lightskyblue'], textprops={'fontsize': 9})
-    ax_pie.axis('equal')
-    st.pyplot(fig_pie)
+if 'Gender' in filtered_df.columns:
+    gender_counts = filtered_df['Gender'].value_counts()
+    if not gender_counts.empty:
+        fig_pie, ax_pie = plt.subplots(figsize=(4, 4))
+        ax_pie.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%',
+                   startangle=90, colors=['lightcoral', 'lightskyblue'], textprops={'fontsize': 9})
+        ax_pie.axis('equal')
+        st.pyplot(fig_pie)
+    else:
+        st.info("Tidak ada data gender pada filter ini.")
 else:
     st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
