@@ -149,7 +149,7 @@ if 'Gender' in filtered_df.columns:
 else:
     st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
 
-# --- Box Plot CGPA100–CGPA400 per Tahun Masuk ---
+# --- Box Plot CGPA100–CGPA400 per Tahun Lulus ---
 st.subheader("Distributed GPA year 1 - 4 per Graduation Year")
 
 # Pastikan kolom tersedia
