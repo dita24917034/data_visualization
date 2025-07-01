@@ -73,17 +73,20 @@ st.title("Universitas ABC Academic Dashboard")
 # --- Kartu Statistik: Total Mahasiswa, Rata-rata CGPA, Tahun Masuk (YoG) ---
 col1, col2, col3 = st.columns(3)
 
+# Style umum untuk semua card
+card_style = """
+    <div style='padding: 16px; background-color: #f0f2f6; border-radius: 10px;
+                text-align: center; box-shadow: 1px 1px 5px rgba(0,0,0,0.05);'>
+        <h5 style='color: #333; font-size: 14px;'>{title}</h5>
+        <h3 style='color: {color}; font-size: 20px; margin-top: 5px;'>{value}</h3>
+    </div>
+"""
+
 # Card 1: Total Mahasiswa
 with col1:
-    if 'ID No' in filtered_df.columns:
-        total_students = filtered_df['ID No'].nunique()
-        st.markdown(f"""
-            <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px;
-                        text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
-                <h4 style='color: #333;'>Total Mahasiswa</h4>
-                <h2 style='color: #007acc;'>{total_students}</h2>
-            </div>
-        """, unsafe_allow_html=True)
+    if 'ID No.' in filtered_df.columns:
+        total_students = filtered_df['ID No.'].nunique()
+        st.markdown(card_style.format(title="Total Mahasiswa", value=total_students, color="#007acc"), unsafe_allow_html=True)
     else:
         st.warning("Kolom 'ID No.' tidak ditemukan dalam data.")
 
@@ -91,26 +94,20 @@ with col1:
 with col2:
     if 'CGPA' in filtered_df.columns:
         avg_cgpa = round(filtered_df['CGPA'].mean(), 2)
-        st.markdown(f"""
-            <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px;
-                        text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
-                <h4 style='color: #333;'>Rata-rata CGPA</h4>
-                <h2 style='color: #28a745;'>{avg_cgpa}</h2>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(card_style.format(title="Rata-rata CGPA", value=avg_cgpa, color="#28a745"), unsafe_allow_html=True)
     else:
         st.warning("Kolom 'CGPA' tidak ditemukan dalam data.")
 
 # Card 3: Tahun Masuk (YoG)
 with col3:
-    year_display = selected_yog if selected_yog != "Semua Tahun" else "Semua Tahun"
-    st.markdown(f"""
-        <div style='padding: 20px; background-color: #f0f2f6; border-radius: 10px;
-                    text-align: center; box-shadow: 2px 2px 8px rgba(0,0,0,0.05);'>
-            <h4 style='color: #333;'>Tahun Masuk (YoG)</h4>
-            <h2 style='color: #d9534f;'>{year_display}</h2>
-        </div>
-    """, unsafe_allow_html=True)
+    if not filtered_df.empty and 'YoG' in filtered_df.columns:
+        min_yog = int(filtered_df['YoG'].min())
+        max_yog = int(filtered_df['YoG'].max())
+        year_range = f"{min_yog} – {max_yog}" if min_yog != max_yog else f"{min_yog}"
+        st.markdown(card_style.format(title="Tahun Masuk (YoG)", value=year_range, color="#d9534f"), unsafe_allow_html=True)
+    else:
+        st.markdown(card_style.format(title="Tahun Masuk (YoG)", value="-", color="#d9534f"), unsafe_allow_html=True)
+
 
 # --- Bar Chart: Rata-rata CGPA per Tahun
 st.subheader("📊 Rata-rata GPA Mahasiswa per Tahun")
