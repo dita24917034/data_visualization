@@ -29,26 +29,26 @@ filtered_df = df[df['Prog Code'] == selected_prog]
 # # --- Bar Chart: Rata-rata GPA per Tahun ---
 st.subheader("📊 Rata-rata GPA per Tahun Masuk")
 # 
-if 'YoG' in filtered_df.columns and 'GPA' in filtered_df.columns:
-avg_gpa_per_year = filtered_df.groupby('YoG')['CGPA'].mean()
- 
-fig_bar, ax_bar = plt.subplots()
-avg_gpa_per_year.plot(kind='bar', color='skyblue', ax=ax_bar)
-ax_bar.set_ylabel("Rata-rata GPA")
-ax_bar.set_xlabel("Tahun Masuk")
-ax_bar.set_title("Rata-rata GPA per Tahun Masuk")
-st.pyplot(fig_bar)
+if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
+    avg_gpa_per_year = filtered_df.groupby('YoG')['CGPA'].mean()
+
+    fig_bar, ax_bar = plt.subplots()
+    avg_gpa_per_year.plot(kind='bar', color='skyblue', ax=ax_bar)
+    ax_bar.set_ylabel("Rata-rata CGPA")
+    ax_bar.set_xlabel("Tahun Masuk")
+    ax_bar.set_title("Rata-rata CGPA per Tahun (YoG)")
+    st.pyplot(fig_bar)
 else:
-st.warning("Kolom 'Admission Year' atau 'GPA' tidak ditemukan dalam data.")
+    st.warning("Kolom 'YoG' atau 'CGPA' tidak ditemukan dalam data.")
 
 # --- Pie Chart: Gender Distribution ---
 st.subheader("🧑‍🎓 Distribusi Gender Mahasiswa")
 
 if 'Gender' in filtered_df.columns:
-gender_counts = filtered_df['Gender'].value_counts()
-fig_pie, ax_pie = plt.subplots()
-ax_pie.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90, colors=['lightcoral', 'lightskyblue'])
-ax_pie.axis('equal')  # Pie chart as a circle
-st.pyplot(fig_pie)
+    gender_counts = filtered_df['Gender'].value_counts()
+    fig_pie, ax_pie = plt.subplots()
+    ax_pie.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', startangle=90, colors=['lightcoral', 'lightskyblue'])
+    ax_pie.axis('equal')
+    st.pyplot(fig_pie)
 else:
-st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
+    st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
