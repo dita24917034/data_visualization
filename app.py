@@ -45,12 +45,12 @@ st.sidebar.header("Filter Data")
 # Filter Program Studi - dengan opsi "Semua"
 prog_codes = sorted(df['Prog Code'].dropna().unique())
 prog_options = ["All Program"] + prog_codes
-selected_prog = st.sidebar.selectbox("Pilih Program Studi (Prog Code):", prog_options)
+selected_prog = st.sidebar.selectbox("Program :", prog_options)
 
 # Filter Tahun Masuk - dropdown tunggal dengan opsi "Semua Tahun"
 available_yog = sorted(df['YoG'].dropna().unique())
 yog_options = ["All Years"] + [str(y) for y in available_yog]
-selected_yog = st.sidebar.selectbox("Pilih Tahun Masuk (YoG):", yog_options)
+selected_yog = st.sidebar.selectbox("Year :", yog_options)
 
 # -------------------------------
 # Filter Data Berdasarkan Pilihan
@@ -148,9 +148,9 @@ if 'Gender' in filtered_df.columns:
         st.info("Tidak ada data gender pada filter ini.")
 else:
     st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
+
 # --- Box Plot CGPA100–CGPA400 per Tahun Masuk ---
-# --- Box Plot CGPA100–CGPA400 per Tahun Masuk ---
-st.subheader("Distributed GPA year 1 - 4 per Year Of Admission")
+st.subheader("Distributed GPA year 1 - 4 per Year of Admission")
 
 # Pastikan kolom tersedia
 cgpa_columns = ['CGPA100', 'CGPA200', 'CGPA300', 'CGPA400']
@@ -164,14 +164,14 @@ if available_cols and 'YoG' in filtered_df.columns:
             id_vars=['YoG'],
             value_vars=available_cols,
             var_name='Level',
-            value_name='GPA'
+            value_name='Nilai CGPA'
         )
 
         # Plot dengan Matplotlib/Seaborn (ukuran default)
         import seaborn as sns
         fig_box, ax_box = plt.subplots(figsize=(7, 4))  # Ukuran sebelum dikecilkan
-        sns.boxplot(data=boxplot_data, x='YoG', y='CGPA', hue='Level', ax=ax_box)
-        ax_box.set_title("Distributed GPA year 1 - 4 per Year Of Admission")
+        sns.boxplot(data=boxplot_data, x='YoG', y='Nilai CGPA', hue='Level', ax=ax_box)
+        ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk")
         ax_box.legend(title='Tingkat')
         st.pyplot(fig_box)
     else:
