@@ -77,7 +77,7 @@ col1, col2, col3 = st.columns(3)
 card_style = """
     <div style='padding: 16px; background-color: #f0f2f6; border-radius: 10px;
                 text-align: center; box-shadow: 1px 1px 5px rgba(0,0,0,0.05);'>
-        <h5 style='color: #333; font-size: 14px;'>{title}</h5>
+        <h5 style='color: #333; font-size: 15px;'>{title}</h5>
         <h3 style='color: {color}; font-size: 20px; margin-top: 5px;'>{value}</h3>
     </div>
 """
@@ -171,8 +171,8 @@ if available_cols and 'YoG' in filtered_df.columns:
         import seaborn as sns
         fig_box, ax_box = plt.subplots(figsize=(7, 4))  # Ukuran sebelum dikecilkan
         sns.boxplot(data=boxplot_data, x='YoG', y='Nilai CGPA', hue='Level', ax=ax_box)
-        ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk")
-        ax_box.legend(title='Tingkat')
+        ax_box.set_title("Distributed GPA year 1 - 4 per Year of Admission")
+        ax_box.legend(title='Grade')
         st.pyplot(fig_box)
     else:
         st.info("Tidak ada data untuk ditampilkan dalam box plot.")
