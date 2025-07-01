@@ -68,7 +68,7 @@ if selected_yog != "All Years":
 # -------------------------------
 # Main Dashboard
 # -------------------------------
-st.title("University ABC Student Dashboard")
+st.title("University ABC Students Dashboard")
 
 # --- Kartu Statistik: Total Mahasiswa, Rata-rata CGPA, Tahun Masuk (YoG) ---
 col1, col2, col3 = st.columns(3)
@@ -170,7 +170,7 @@ if available_cols and 'YoG' in filtered_df.columns:
         # Plot dengan Matplotlib/Seaborn (ukuran default)
         import seaborn as sns
         fig_box, ax_box = plt.subplots(figsize=(7, 4))  # Ukuran sebelum dikecilkan
-        sns.boxplot(data=boxplot_data, x='YoG', y='Nilai GPA', hue='Level', ax=ax_box)
+        sns.boxplot(data=boxplot_data, x='YoG', y='CGPA', hue='Level', ax=ax_box)
         ax_box.set_title("Distributed GPA year 1 - 4 per Year Of Admission")
         ax_box.legend(title='Tingkat')
         st.pyplot(fig_box)
