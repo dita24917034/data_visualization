@@ -104,16 +104,16 @@ with col2:
 
 
 # --- Bar Chart: Rata-rata CGPA per Tahun
-st.subheader("📊 Rata-rata CGPA Mahasiswa per Tahun")
+st.subheader("📊 Rata-rata GPA Mahasiswa per Tahun")
 
 if 'YoG' in filtered_df.columns and 'CGPA' in filtered_df.columns:
     if not filtered_df.empty:
         avg_gpa = filtered_df.groupby('YoG')['CGPA'].mean()
-        fig_bar, ax_bar = plt.subplots(figsize=(5, 3))
+        fig_bar, ax_bar = plt.subplots(figsize=(4, 2.5))
         avg_gpa.plot(kind='bar', color='skyblue', ax=ax_bar)
-        ax_bar.set_ylabel("Rata-rata CGPA")
+        ax_bar.set_ylabel("Rata-rata GPA")
         ax_bar.set_xlabel("Tahun Masuk")
-        ax_bar.set_title("Rata-rata CGPA Mahasiswa", fontsize=10)
+        ax_bar.set_title("Rata-rata GPA Mahasiswa", fontsize=10)
         st.pyplot(fig_bar)
     else:
         st.info("Tidak ada data untuk kombinasi filter.")
@@ -126,7 +126,7 @@ st.subheader("🧑‍🎓 Distribusi Gender Mahasiswa")
 if 'Gender' in filtered_df.columns:
     gender_counts = filtered_df['Gender'].value_counts()
     if not gender_counts.empty:
-        fig_pie, ax_pie = plt.subplots(figsize=(4, 4))
+        fig_pie, ax_pie = plt.subplots(figsize=(2, 2))
         ax_pie.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%',
                    startangle=90, colors=['lightcoral', 'lightskyblue'], textprops={'fontsize': 9})
         ax_pie.axis('equal')
@@ -136,7 +136,7 @@ if 'Gender' in filtered_df.columns:
 else:
     st.warning("Kolom 'Gender' tidak ditemukan dalam data.")
 # --- Box Plot CGPA100–CGPA400 per Tahun Masuk ---
-st.subheader("📦 Distribusi Nilai CGPA100–400 per Tahun Masuk")
+st.subheader("📦 Distribusi Nilai GPA Thn 1 - 4 per Tahun Masuk")
 
 # Pastikan kolom tersedia
 cgpa_columns = ['CGPA100', 'CGPA200', 'CGPA300', 'CGPA400']
@@ -150,14 +150,14 @@ if available_cols and 'YoG' in filtered_df.columns:
             id_vars=['YoG'],
             value_vars=available_cols,
             var_name='Level',
-            value_name='Nilai CGPA'
+            value_name='Nilai GPA'
         )
 
         # Plot dengan Matplotlib
         import seaborn as sns
         fig_box, ax_box = plt.subplots(figsize=(7, 4))
-        sns.boxplot(data=boxplot_data, x='YoG', y='Nilai CGPA', hue='Level', ax=ax_box)
-        ax_box.set_title("Distribusi CGPA100–400 per Tahun Masuk")
+        sns.boxplot(data=boxplot_data, x='YoG', y='Nilai GPA', hue='Level', ax=ax_box)
+        ax_box.set_title("Distribusi Nilai GPA Thn 1 - 4 per Tahun Masuk")
         ax_box.legend(title='Tingkat')
         st.pyplot(fig_box)
     else:
